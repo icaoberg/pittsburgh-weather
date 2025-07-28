@@ -4,17 +4,23 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 import os
 
-# Get today's date in YYYYMMDD format
+# ─────────────────────────────────────────────────────────────
+# Get today's date formatted as YYYYMMDD (e.g., 20250728)
+# ─────────────────────────────────────────────────────────────
 today_str = datetime.today().strftime("%Y%m%d")
 
-# Prepare output folder and file paths
+# ─────────────────────────────────────────────────────────────
+# Ensure output directory exists and set file paths
+# ─────────────────────────────────────────────────────────────
 os.makedirs("data", exist_ok=True)
 json_filename = os.path.join("data", f"{today_str}.json")
 plot_filename = os.path.join("data", f"{today_str}.png")
 symlink_json = os.path.join("data", "weather.json")
 symlink_png = os.path.join("data", "weather.png")
 
-# Define the Open-Meteo API URL for Pittsburgh
+# ─────────────────────────────────────────────────────────────
+# Open-Meteo API endpoint with parameters for Pittsburgh
+# ─────────────────────────────────────────────────────────────
 url = (
     "https://api.open-meteo.com/v1/forecast?"
     "latitude=40.4406&longitude=-79.9959&"
@@ -25,28 +31,38 @@ url = (
 )
 
 try:
-    # Make the API request
+    # ─────────────────────────────────────────────────────────
+    # Fetch data from the Open-Meteo API
+    # ─────────────────────────────────────────────────────────
     response = requests.get(url)
-    response.raise_for_status()
-    weather_data = response.json()
+    response.raise_for_status()  # Raise error if status code is not 200
+    weather_data = response.json()  # Parse JSON content
 
-    # Save JSON data to file
+    # ─────────────────────────────────────────────────────────
+    # Save raw weather data to a dated JSON file
+    # ─────────────────────────────────────────────────────────
     with open(json_filename, "w") as f:
         json.dump(weather_data, f, indent=2)
     print(f"Weather data saved to '{json_filename}'.")
 
-    # Create or update JSON symlink
+    # ─────────────────────────────────────────────────────────
+    # Create or update symlink to latest weather.json
+    # ─────────────────────────────────────────────────────────
     if os.path.islink(symlink_json) or os.path.exists(symlink_json):
         os.remove(symlink_json)
     os.symlink(os.path.abspath(json_filename), symlink_json)
     print(f"Symlink created: {symlink_json} -> {json_filename}")
 
-    # Extract hourly timestamps and temperatures
+    # ─────────────────────────────────────────────────────────
+    # Extract timestamps and temperatures from hourly forecast
+    # ─────────────────────────────────────────────────────────
     timestamps = weather_data["hourly"]["time"]
     temperatures = weather_data["hourly"]["temperature_2m"]
     time_objs = [datetime.fromisoformat(t) for t in timestamps]
 
-    # Plot the hourly temperature
+    # ─────────────────────────────────────────────────────────
+    # Create a temperature line plot
+    # ─────────────────────────────────────────────────────────
     plt.figure(figsize=(10, 5))
     plt.plot(time_objs, temperatures, label="Temperature (°C)", color="tab:red", linewidth=2)
     plt.title("Hourly Temperature Forecast - Pittsburgh")
@@ -57,16 +73,23 @@ try:
     plt.legend()
     plt.tight_layout()
 
-    # Save the plot
+    # ─────────────────────────────────────────────────────────
+    # Save the plot to a dated PNG file
+    # ─────────────────────────────────────────────────────────
     plt.savefig(plot_filename)
     print(f"Plot saved to '{plot_filename}'.")
 
-    # Create or update PNG symlink
+    # ─────────────────────────────────────────────────────────
+    # Create or update symlink to latest weather.png
+    # ─────────────────────────────────────────────────────────
     if os.path.islink(symlink_png) or os.path.exists(symlink_png):
         os.remove(symlink_png)
     os.symlink(os.path.abspath(plot_filename), symlink_png)
     print(f"Symlink created: {symlink_png} -> {plot_filename}")
 
+# ─────────────────────────────────────────────────────────────
+# Error handling for API or runtime failures
+# ─────────────────────────────────────────────────────────────
 except requests.RequestException as e:
     print(f"Error fetching data from Open-Meteo API: {e}")
 except Exception as e:
