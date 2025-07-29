@@ -3,6 +3,7 @@ import json
 import matplotlib.pyplot as plt
 from datetime import datetime
 import os
+import shutil
 
 # ─────────────────────────────────────────────────────────────
 # Get today's date formatted as YYYYMMDD (e.g., 20250728)
@@ -15,8 +16,7 @@ today_str = datetime.today().strftime("%Y%m%d")
 os.makedirs("data", exist_ok=True)
 json_filename = os.path.join("data", f"{today_str}.json")
 plot_filename = os.path.join("data", f"{today_str}.png")
-symlink_json = os.path.join("data", "weather.json")
-symlink_png = os.path.join("data", "weather.png")
+plot_today_filename = os.path.join("data", "today.png")
 
 # ─────────────────────────────────────────────────────────────
 # Open-Meteo API endpoint with parameters for Pittsburgh
@@ -35,8 +35,8 @@ try:
     # Fetch data from the Open-Meteo API
     # ─────────────────────────────────────────────────────────
     response = requests.get(url)
-    response.raise_for_status()  # Raise error if status code is not 200
-    weather_data = response.json()  # Parse JSON content
+    response.raise_for_status()
+    weather_data = response.json()
 
     # ─────────────────────────────────────────────────────────
     # Save raw weather data to a dated JSON file
@@ -44,14 +44,6 @@ try:
     with open(json_filename, "w") as f:
         json.dump(weather_data, f, indent=2)
     print(f"Weather data saved to '{json_filename}'.")
-
-    # ─────────────────────────────────────────────────────────
-    # Create or update symlink to latest weather.json
-    # ─────────────────────────────────────────────────────────
-    if os.path.islink(symlink_json) or os.path.exists(symlink_json):
-        os.remove(symlink_json)
-    os.symlink(os.path.abspath(json_filename), symlink_json)
-    print(f"Symlink created: {symlink_json} -> {json_filename}")
 
     # ─────────────────────────────────────────────────────────
     # Extract timestamps and temperatures from hourly forecast
@@ -74,18 +66,13 @@ try:
     plt.tight_layout()
 
     # ─────────────────────────────────────────────────────────
-    # Save the plot to a dated PNG file
+    # Save the plot to a dated PNG file and copy to today.png
     # ─────────────────────────────────────────────────────────
     plt.savefig(plot_filename)
     print(f"Plot saved to '{plot_filename}'.")
 
-    # ─────────────────────────────────────────────────────────
-    # Create or update symlink to latest weather.png
-    # ─────────────────────────────────────────────────────────
-    if os.path.islink(symlink_png) or os.path.exists(symlink_png):
-        os.remove(symlink_png)
-    os.symlink(os.path.abspath(plot_filename), symlink_png)
-    print(f"Symlink created: {symlink_png} -> {plot_filename}")
+    shutil.copy(plot_filename, plot_today_filename)
+    print(f"Copied '{plot_filename}' to '{plot_today_filename}'.")
 
 # ─────────────────────────────────────────────────────────────
 # Error handling for API or runtime failures
