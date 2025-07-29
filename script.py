@@ -19,11 +19,22 @@ plot_filename = os.path.join("data", f"{today_str}.png")
 plot_today_filename = os.path.join("data", "today.png")
 
 # ─────────────────────────────────────────────────────────────
-# Open-Meteo API endpoint with parameters for Pittsburgh
+# Checks for coordinates with Pittsburgh as the default
 # ─────────────────────────────────────────────────────────────
+lat = 40.4406
+long = -79.9959
+def coords(lat, long):
+    lat = latitude
+    long = longitude
+
+
+# ─────────────────────────────────────────────────────────────
+# Creates endpoint
+# ─────────────────────────────────────────────────────────────
+
 url = (
     "https://api.open-meteo.com/v1/forecast?"
-    "latitude=40.4406&longitude=-79.9959&"
+    f"latitude={lat}&longitude={long}&"
     "current_weather=true&"
     "hourly=temperature_2m,precipitation,wind_speed_10m&"
     "daily=temperature_2m_max,temperature_2m_min,precipitation_sum&"
@@ -31,6 +42,27 @@ url = (
 )
 
 try:
+    # ─────────────────────────────────────────────────────────
+    # Retrieves city name:
+    # ─────────────────────────────────────────────────────────
+    headers = {
+    "User-Agent": "my-geocoding-app (luis@example.com)"  # Use your real email
+    }
+    
+    city = requests.get("https://nominatim.openstreetmap.org/reverse?lat=32.3792&lon=-86.3077&format=json", headers=headers)
+    
+    
+    output = city.json()
+    print(output)
+    
+    #"http://api.geonames.org/findNearbyPlaceNameJSON?lat=32.3792&lng=-86.3077&username=luisjrubio"
+    
+    #https://nominatim.openstreetmap.org/reverse?lat=32.3792&lon=-86.3077&format=json
+    
+    address = output.get("address", {})
+    name = address.get("city") or address.get("town") or address.get("village") or address.get("state") or address.get("suburb") or address.get("county")
+
+    
     # ─────────────────────────────────────────────────────────
     # Fetch data from the Open-Meteo API
     # ─────────────────────────────────────────────────────────
