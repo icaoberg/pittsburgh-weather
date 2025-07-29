@@ -1,6 +1,6 @@
 # 🌦️ Pittsburgh Weather Fetcher
 
-![](data/weather.png)
+![](data/today.png)
 
 This Python script retrieves hourly weather forecast data for **Pittsburgh, PA** using the [Open-Meteo API](https://open-meteo.com/), saves the results as JSON, generates a temperature plot, and creates convenient symbolic links for easy access.
 
