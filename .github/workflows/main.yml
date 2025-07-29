@@ -1,0 +1,65 @@
+name: Run Weather Plot Script and Commit Results
+
+# ─────────────────────────────────────────────────────────────
+# Trigger the workflow:
+# - Every hour (UTC)
+# - On manual dispatch from GitHub UI
+# - On push to the main branch
+# ─────────────────────────────────────────────────────────────
+on:
+  schedule:
+    - cron: '0 * * * *'  # Run at minute 0 of every hour
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  run-script:
+    name: Fetch and Commit Weather Data
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+
+    steps:
+    # ─────────────────────────────────────────────────────────
+    # Step 1: Check out the code in the repository
+    # ─────────────────────────────────────────────────────────
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # ─────────────────────────────────────────────────────────
+    # Step 2: Set up Python 3.10 environment
+    # ─────────────────────────────────────────────────────────
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.10
+
+    # ─────────────────────────────────────────────────────────
+    # Step 3: Install Python dependencies from requirements.txt
+    # ─────────────────────────────────────────────────────────
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # ─────────────────────────────────────────────────────────
+    # Step 4: Run the main weather data script
+    # ─────────────────────────────────────────────────────────
+    - name: Run weather script
+      run: |
+        python script.py
+
+    # ─────────────────────────────────────────────────────────
+    # Step 5: Commit output files to the repository
+    # - Includes:
+    #     - data/today.png
+    #     - data/YYYYMMDD.png
+    #     - data/YYYYMMDD.json
+    # ─────────────────────────────────────────────────────────
+    - name: Commit output files
+      run: |
+        today=$(date +"%Y%m%d")
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add data/today.png data/${today}.png data/${today}.json
+        git commit -m "Add weather data and plot for ${today}" || echo "No changes to commit"
+        git push
