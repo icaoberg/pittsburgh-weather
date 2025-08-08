@@ -1,7 +1,7 @@
 {
   "latitude": 40.445118,
   "longitude": -80.005745,
-  "generationtime_ms": 0.13267993927001953,
+  "generationtime_ms": 0.20396709442138672,
   "utc_offset_seconds": -14400,
   "timezone": "America/New_York",
   "timezone_abbreviation": "GMT-4",
@@ -16,11 +16,11 @@
     "weathercode": "wmo code"
   },
   "current_weather": {
-    "time": "2025-08-08T00:30",
+    "time": "2025-08-08T01:15",
     "interval": 900,
-    "temperature": 20.0,
-    "windspeed": 6.0,
-    "winddirection": 115,
+    "temperature": 19.5,
+    "windspeed": 3.9,
+    "winddirection": 68,
     "is_day": 0,
     "weathercode": 0
   },
