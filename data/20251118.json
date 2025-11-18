@@ -1,7 +1,7 @@
 {
   "latitude": 40.445118,
   "longitude": -80.005745,
-  "generationtime_ms": 0.30982494354248047,
+  "generationtime_ms": 0.2893209457397461,
   "utc_offset_seconds": -18000,
   "timezone": "America/New_York",
   "timezone_abbreviation": "GMT-5",
@@ -16,11 +16,11 @@
     "weathercode": "wmo code"
   },
   "current_weather": {
-    "time": "2025-11-17T22:30",
+    "time": "2025-11-17T23:00",
     "interval": 900,
-    "temperature": 0.2,
-    "windspeed": 4.8,
-    "winddirection": 193,
+    "temperature": 0.1,
+    "windspeed": 5.1,
+    "winddirection": 225,
     "is_day": 0,
     "weathercode": 0
   },
