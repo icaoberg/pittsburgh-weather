@@ -1,7 +1,7 @@
 {
   "latitude": 40.445118,
   "longitude": -80.005745,
-  "generationtime_ms": 0.27942657470703125,
+  "generationtime_ms": 0.2130270004272461,
   "utc_offset_seconds": -14400,
   "timezone": "America/New_York",
   "timezone_abbreviation": "GMT-4",
@@ -16,13 +16,13 @@
     "weathercode": "wmo code"
   },
   "current_weather": {
-    "time": "2026-03-13T05:15",
+    "time": "2026-03-13T06:15",
     "interval": 900,
     "temperature": -0.9,
-    "windspeed": 4.6,
-    "winddirection": 51,
+    "windspeed": 4.0,
+    "winddirection": 63,
     "is_day": 0,
-    "weathercode": 1
+    "weathercode": 3
   },
   "hourly_units": {
     "time": "iso8601",
@@ -224,7 +224,7 @@
       8.4,
       6.0,
       4.6,
-      3.8,
+      4.0,
       3.2,
       2.8,
       2.8,
@@ -562,9 +562,9 @@
       26.1,
       27.7,
       26.1,
-      22.5,
-      20.4,
-      23.8,
+      22.4,
+      22.2,
+      26.0,
       24.6,
       26.1,
       22.5,
