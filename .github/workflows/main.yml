@@ -58,8 +58,9 @@ jobs:
     - name: Commit output files
       run: |
         today=$(date +"%Y%m%d")
+        month=$(date +"%Y%m")
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
-        git add data/today.png data/${today}.png data/${today}.json
+        git add data/today.png data/${today}.png data/${month}.parquet
         git commit -m "Add weather data and plot for ${today}" || echo "No changes to commit"
         git push
