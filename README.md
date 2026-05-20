@@ -1,5 +1,7 @@
 # 🌦️ Pittsburgh Weather Fetcher
 
+[![GitHub Actions](https://github.com/icaoberg/pittsburgh-weather/actions/workflows/main.yml/badge.svg)](https://github.com/icaoberg/pittsburgh-weather/actions/workflows/main.yml)
+
 ![](data/today.png)
 
 This Python script retrieves hourly weather forecast data for **Pittsburgh, PA** using the [Open-Meteo API](https://open-meteo.com/), saves the results as JSON, generates a temperature plot, and creates convenient symbolic links for easy access.
